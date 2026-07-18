@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6366f1">
 <title>TaskFlow - Smart Todo List</title>
 <style>
 :root {
@@ -16,7 +17,7 @@
   --gray-300: #d1d5db;
   --gray-400: #9ca3af;
   --gray-500: #6b7280;
-  --gray-600: #4b5563;
+  --gray-600: #193358;
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
@@ -58,6 +59,54 @@ body {
 .header p {
   opacity: 0.9;
   font-size: 1.1rem;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notification-btn, .settings-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.notification-btn:hover, .settings-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.05);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--danger);
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
 }
 
 .stats {
@@ -464,12 +513,14 @@ body {
   bottom: 0;
   background: rgba(0,0,0,0.5);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .modal-overlay.active {
@@ -481,11 +532,12 @@ body {
   background: white;
   padding: 32px;
   border-radius: 16px;
-  width: 90%;
+  width: 100%;
   max-width: 500px;
   box-shadow: var(--shadow-lg);
   transform: scale(0.9);
   transition: transform 0.3s;
+  margin: auto;
 }
 
 .modal-overlay.active .modal {
@@ -606,14 +658,803 @@ body {
     font-size: 1.5rem;
   }
 }
+
+/* Notification Modal Styles */
+.notification-modal {
+  max-width: 450px;
+}
+
+.notification-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.notification-section:last-of-type {
+  border-bottom: none;
+}
+
+.notification-section h3 {
+  font-size: 1rem;
+  color: var(--gray-800);
+  margin-bottom: 4px;
+}
+
+.section-desc {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  margin-bottom: 16px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.toggle-row span {
+  font-size: 0.95rem;
+  color: var(--gray-700);
+}
+
+/* Toggle Switch */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--gray-300);
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle input:checked + .toggle-slider {
+  background-color: var(--primary);
+}
+
+.toggle input:checked + .toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.test-notification-btn, .whatsapp-test-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.test-notification-btn:hover {
+  background: var(--gray-200);
+}
+
+.whatsapp-test-btn {
+  background: #25D366;
+  color: white;
+  border-color: #25D366;
+}
+
+.whatsapp-test-btn:hover {
+  background: #20BD5A;
+}
+
+.whatsapp-test-btn.morning-test {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.whatsapp-test-btn.morning-test:hover {
+  background: #d97706;
+}
+
+.whatsapp-setup {
+  margin-top: 12px;
+  display: none;
+}
+
+.whatsapp-setup.active {
+  display: block;
+}
+
+.whatsapp-setup label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin-bottom: 6px;
+}
+
+.whatsapp-setup input, .whatsapp-setup select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.whatsapp-setup input:focus, .whatsapp-setup select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.helper-text {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 4px;
+}
+
+.permission-status {
+  margin-top: 12px;
+  padding: 10px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-label {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.status-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.status-value.granted {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-value.denied {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.status-value.default, .status-value.unknown {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* WhatsApp reminder button on task */
+.task-whatsapp-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--gray-800);
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.success {
+  background: var(--success);
+}
+
+.toast.error {
+  background: var(--danger);
+}
+
+.toast.info {
+  background: var(--primary);
+}
+
+/* Notification Banner */
+.notification-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-lg);
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-banner.hidden {
+  display: none;
+}
+
+.banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.banner-content span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.banner-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.banner-btn.enable {
+  background: white;
+  color: var(--primary);
+}
+
+.banner-btn.enable:hover {
+  background: var(--gray-100);
+  transform: scale(1.02);
+}
+
+.banner-btn.dismiss {
+  background: rgba(255,255,255,0.2);
+  color: white;
+}
+
+.banner-btn.dismiss:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* HTTPS Notice */
+.https-notice {
+  margin-top: 16px;
+  padding: 16px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+}
+
+.notice-content {
+  display: flex;
+  gap: 12px;
+}
+
+.notice-icon {
+  font-size: 1.5rem;
+}
+
+.notice-text {
+  flex: 1;
+}
+
+.notice-text strong {
+  display: block;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.notice-text p {
+  font-size: 0.85rem;
+  color: #78350f;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Email Setup */
+.email-setup {
+  margin-top: 12px;
+}
+
+.email-setup label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin-bottom: 6px;
+}
+
+.email-setup input, .email-setup select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.email-setup input:focus, .email-setup select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.emailjs-setup {
+  padding: 12px;
+  background: var(--gray-50);
+  border-radius: 8px;
+}
+
+.emailjs-setup a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.emailjs-setup a:hover {
+  text-decoration: underline;
+}
+
+.email-test-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background: #ea4335;
+  color: white;
+  border: 1px solid #ea4335;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.email-test-btn:hover {
+  background: #d33426;
+}
+
+.push-status {
+  margin-top: 12px;
+  padding: 10px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.push-status .status-label {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.push-status .status-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.push-status .status-value.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.push-status .status-value.inactive {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.push-status .status-value.error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.morning-summary-time {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.morning-summary-time label {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.morning-summary-time input {
+  padding: 8px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  width: 100px;
+}
+
+/* Calendar Modal */
+.calendar-modal {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+}
+
+.calendar-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--gray-100);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.calendar-close:hover {
+  background: var(--gray-200);
+}
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.calendar-nav-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--gray-300);
+  background: white;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calendar-nav-btn:hover {
+  background: var(--gray-100);
+  border-color: var(--primary);
+}
+
+.calendar-month-year {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.calendar-weekdays div {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  padding: 8px 0;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  position: relative;
+  background: white;
+  border: 1px solid var(--gray-200);
+}
+
+.calendar-day:hover {
+  background: var(--gray-50);
+  border-color: var(--primary);
+}
+
+.calendar-day.other-month {
+  color: var(--gray-300);
+  background: var(--gray-50);
+}
+
+.calendar-day.today {
+  background: #ede9fe;
+  border-color: #7c3aed;
+  font-weight: 600;
+}
+
+.calendar-day.selected {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.calendar-day.has-tasks::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.calendar-day.overdue::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.calendar-day.has-tasks.overdue::after {
+  background: var(--danger);
+}
+
+.calendar-day.selected.has-tasks::after,
+.calendar-day.selected.overdue::after {
+  background: white;
+}
+
+.calendar-tasks-panel {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.calendar-tasks-panel h3 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  color: var(--gray-800);
+}
+
+.selected-date-tasks {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.selected-date-tasks .task-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.selected-date-tasks .task-mini:hover {
+  background: var(--gray-100);
+}
+
+.selected-date-tasks .task-mini.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.selected-date-tasks .task-mini-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--gray-300);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.selected-date-tasks .task-mini.completed .task-mini-checkbox {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.selected-date-tasks .task-mini-text {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.selected-date-tasks .task-mini-priority {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.selected-date-tasks .task-mini-priority.high {
+  background: #fef2f2;
+  color: var(--danger);
+}
+
+.selected-date-tasks .task-mini-priority.medium {
+  background: #fffbeb;
+  color: var(--warning);
+}
+
+.selected-date-tasks .task-mini-priority.low {
+  background: #f0fdf4;
+  color: var(--success);
+}
+
+.no-tasks-hint {
+  color: var(--gray-400);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px;
+}
+
+.calendar-legend {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--gray-600);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.overdue {
+  background: var(--danger);
+}
+
+.legend-dot.today {
+  background: #7c3aed;
+}
+
+.legend-dot.has-tasks {
+  background: var(--primary);
+}
+
+/* Footer actions */
+.footer-right-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.calendar-btn {
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-btn:hover {
+  background: var(--gray-50);
+  border-color: var(--primary);
+  color: var(--primary);
+}
 </style>
 </head>
 <body>
 
 <div class="container">
+  <!-- Notification Permission Banner -->
+  <div class="notification-banner" id="notificationBanner">
+    <div class="banner-content">
+      <span>🔔 Enable notifications to get task reminders!</span>
+      <div class="banner-actions">
+        <button class="banner-btn enable" onclick="enableNotificationsFromBanner()">Enable</button>
+        <button class="banner-btn dismiss" onclick="dismissBanner()">Later</button>
+      </div>
+    </div>
+  </div>
+
   <div class="header">
-    <h1>✨ TaskFlow</h1>
-    <p>Organize your tasks, boost your productivity</p>
+    <div class="header-top">
+      <div>
+        <h1>✨ TaskFlow</h1>
+        <p>Organize your tasks, boost your productivity</p>
+      </div>
+      <div class="header-actions">
+        <button class="notification-btn" id="notificationBtn" onclick="openNotificationSettings()" title="Notification Settings">
+          🔔
+          <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+        </button>
+        <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
+      </div>
+    </div>
   </div>
 
   <div class="stats">
@@ -679,7 +1520,12 @@ body {
 
     <div class="footer-actions">
       <span class="item-count" id="itemCount">0 items left</span>
-      <button class="clear-completed-btn" onclick="clearCompleted()">Clear Completed</button>
+      <div class="footer-right-actions">
+        <button class="calendar-btn" onclick="openCalendarView()">
+          📅 Calendar View
+        </button>
+        <button class="clear-completed-btn" onclick="clearCompleted()">Clear Completed</button>
+      </div>
     </div>
   </div>
 
@@ -708,16 +1554,278 @@ body {
   </div>
 </div>
 
+<!-- Notification Settings Modal -->
+<div class="modal-overlay" id="notificationModal">
+  <div class="modal notification-modal">
+    <h2>🔔 Notification Settings</h2>
+    
+    <div class="notification-section">
+      <h3>📱 Web Push Notifications</h3>
+      <p class="section-desc">Get browser notifications for task reminders</p>
+      
+      <div class="toggle-row">
+        <span>Enable Web Notifications</span>
+        <label class="toggle">
+          <input type="checkbox" id="webNotificationToggle" onchange="toggleWebNotifications()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="toggle-row">
+        <span>Remind me when task is due</span>
+        <label class="toggle">
+          <input type="checkbox" id="dueReminderToggle" checked onchange="saveNotificationSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="toggle-row">
+        <span>Notify overdue tasks</span>
+        <label class="toggle">
+          <input type="checkbox" id="overdueToggle" checked onchange="saveNotificationSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="toggle-row">
+        <span>WhatsApp reminder 1 day before due</span>
+        <label class="toggle">
+          <input type="checkbox" id="reminderDayBeforeToggle" checked onchange="saveNotificationSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="toggle-row">
+        <span>🌅 Morning summary at 9 AM</span>
+        <label class="toggle">
+          <input type="checkbox" id="morningSummaryToggle" checked onchange="saveNotificationSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="morning-summary-time">
+        <label>Summary Time:</label>
+        <input type="time" id="morningSummaryTime" value="09:00" onchange="saveNotificationSettings()">
+      </div>
+      
+      <button class="test-notification-btn" onclick="sendTestNotification()">
+        🧪 Send Test Notification
+      </button>
+      
+      <div class="permission-status" id="permissionStatus">
+        <span class="status-label">Permission Status:</span>
+        <span class="status-value" id="permissionValue">Unknown</span>
+      </div>
+      
+      <div class="https-notice" id="httpsNotice" style="display: none;">
+        <div class="notice-content">
+          <span class="notice-icon">⚠️</span>
+          <div class="notice-text">
+            <strong>HTTPS Required for Notifications</strong>
+            <p>Notifications require HTTPS. When opening files directly (file://), browsers block notifications for security.</p>
+            <p><strong>Solution:</strong> Serve this file over HTTPS or use a local server with HTTPS.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="notification-section">
+      <h3>💬 WhatsApp Notifications</h3>
+      <p class="section-desc">Send task reminders to WhatsApp</p>
+      
+      <div class="toggle-row">
+        <span>Enable WhatsApp Reminders</span>
+        <label class="toggle">
+          <input type="checkbox" id="whatsappToggle" onchange="toggleWhatsApp()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="whatsapp-setup" id="whatsappSetup">
+        <label>Phone Number (with country code):</label>
+        <input type="tel" id="whatsappNumber" placeholder="e.g., 919876543210" onchange="saveWhatsAppNumber()">
+        <p class="helper-text">Enter your WhatsApp number with country code (no + sign)</p>
+        
+        <label style="margin-top: 12px;">Or select contact:</label>
+        <select id="whatsappContact" onchange="useWhatsAppContact()">
+          <option value="">-- Select a contact --</option>
+          <option value="self">📱 My Number</option>
+          <option value="919876543210">👤 Contact 1</option>
+          <option value="919876543211">👤 Contact 2</option>
+        </select>
+      </div>
+      
+      <button class="whatsapp-test-btn" onclick="sendWhatsAppTest()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="16" height="16">
+        Send Test via WhatsApp
+      </button>
+      
+      <button class="whatsapp-test-btn morning-test" onclick="testMorningSummary()">
+        🌅 Send Test Morning Summary
+      </button>
+    </div>
+    
+    <div class="notification-section">
+      <h3>📧 Email Notifications</h3>
+      <p class="section-desc">Receive task reminders via email</p>
+      
+      <div class="toggle-row">
+        <span>Enable Email Reminders</span>
+        <label class="toggle">
+          <input type="checkbox" id="emailToggle" onchange="toggleEmailNotifications()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="email-setup" id="emailSetup" style="display: none;">
+        <label>Your Email Address:</label>
+        <input type="email" id="emailAddress" placeholder="your@email.com" onchange="saveEmailSettings()">
+        
+        <label style="margin-top: 12px;">Email Provider:</label>
+        <select id="emailProvider" onchange="saveEmailSettings()">
+          <option value="mailto">📧 Mailto (Default - opens email app)</option>
+          <option value="gmail">🔵 Gmail (via EmailJS - needs setup)</option>
+        </select>
+        
+        <div class="emailjs-setup" id="emailjsSetup" style="display: none; margin-top: 12px;">
+          <label>EmailJS Public Key (free at emailjs.com):</label>
+          <input type="text" id="emailjsKey" placeholder="Your EmailJS Public Key" onchange="saveEmailSettings()">
+          <label style="margin-top: 8px;">Service ID:</label>
+          <input type="text" id="emailjsService" placeholder="Your Service ID" onchange="saveEmailSettings()">
+          <label style="margin-top: 8px;">Template ID:</label>
+          <input type="text" id="emailjsTemplate" placeholder="Your Template ID" onchange="saveEmailSettings()">
+          <p class="helper-text" style="margin-top: 6px;">
+            <a href="https://www.emailjs.com/docs/sdk/public-api/" target="_blank">Get your free EmailJS credentials →</a>
+          </p>
+        </div>
+        
+        <p class="helper-text" style="margin-top: 10px;">
+          <strong>Note:</strong> Mailto opens your default email app. For automated emails, use EmailJS.
+        </p>
+      </div>
+      
+      <button class="email-test-btn" onclick="sendEmailTest()">
+        📧 Send Test Email
+      </button>
+    </div>
+    
+    <div class="notification-section">
+      <h3>📲 Push Notifications</h3>
+      <p class="section-desc">Browser push notifications (work even when tab is closed)</p>
+      
+      <div class="toggle-row">
+        <span>Enable Push Notifications</span>
+        <label class="toggle">
+          <input type="checkbox" id="pushToggle" onchange="togglePushNotifications()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      
+      <div class="push-status" id="pushStatus">
+        <span class="status-label">Service Worker:</span>
+        <span class="status-value" id="pushStatusValue">Checking...</span>
+      </div>
+      
+      <button class="test-notification-btn" onclick="sendPushTest()">
+        🔔 Send Test Push
+      </button>
+      
+      <div class="https-notice push-notice" id="pushHttpsNotice" style="display: none;">
+        <div class="notice-content">
+          <span class="notice-icon">🔒</span>
+          <div class="notice-text">
+            <strong>HTTPS Required for Push Notifications</strong>
+            <p>Push notifications require HTTPS. Please open this app on an HTTPS website.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="save-btn" onclick="closeNotificationModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar Modal -->
+<div class="modal-overlay" id="calendarModal">
+  <div class="modal calendar-modal">
+    <div class="calendar-header">
+      <h2>📅 Calendar View</h2>
+      <button class="calendar-close" onclick="closeCalendarView()">✕</button>
+    </div>
+    
+    <div class="calendar-nav">
+      <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀</button>
+      <span class="calendar-month-year" id="calendarMonthYear"></span>
+      <button class="calendar-nav-btn" onclick="changeMonth(1)">▶</button>
+    </div>
+    
+    <div class="calendar-weekdays">
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+    </div>
+    
+    <div class="calendar-days" id="calendarDays"></div>
+    
+    <div class="calendar-tasks-panel" id="calendarTasksPanel">
+      <h3 id="selectedDateTitle">Select a date</h3>
+      <div class="selected-date-tasks" id="selectedDateTasks">
+        <p class="no-tasks-hint">Click on a date to see tasks</p>
+      </div>
+    </div>
+    
+    <div class="calendar-legend">
+      <span class="legend-item"><span class="legend-dot overdue"></span> Overdue</span>
+      <span class="legend-item"><span class="legend-dot today"></span> Today</span>
+      <span class="legend-item"><span class="legend-dot has-tasks"></span> Has Tasks</span>
+    </div>
+  </div>
+</div>
+
 <script>
 // State
 let tasks = JSON.parse(localStorage.getItem('taskflow_tasks')) || [];
 let currentFilter = 'all';
 let searchQuery = '';
 
+// Notification Settings
+let notificationSettings = JSON.parse(localStorage.getItem('taskflow_notifications')) || {
+  webEnabled: false,
+  dueReminders: true,
+  overdueAlerts: true,
+  reminderDayBefore: true,
+  whatsappEnabled: false,
+  whatsappNumber: '',
+  emailEnabled: false,
+  emailAddress: '',
+  emailProvider: 'mailto',
+  emailjsKey: '',
+  emailjsService: '',
+  emailjsTemplate: '',
+  pushEnabled: false,
+  morningSummaryEnabled: true,
+  morningSummaryTime: '09:00'
+};
+
+// Service Worker registration
+let serviceWorkerRegistration = null;
+
+// Notification check interval
+let notificationCheckInterval = null;
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   renderTasks();
   updateStats();
+  loadNotificationSettings();
+  startNotificationChecker();
+  initializeBanner(); // Show notification banner
   
   // Enter key to add task
   document.getElementById('taskInput').addEventListener('keypress', (e) => {
@@ -732,6 +1840,1116 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ============ NOTIFICATION FUNCTIONS ============
+
+// Load notification settings into UI
+function loadNotificationSettings() {
+  document.getElementById('webNotificationToggle').checked = notificationSettings.webEnabled;
+  document.getElementById('dueReminderToggle').checked = notificationSettings.dueReminders;
+  document.getElementById('overdueToggle').checked = notificationSettings.overdueAlerts;
+  document.getElementById('reminderDayBeforeToggle').checked = notificationSettings.reminderDayBefore !== false;
+  document.getElementById('morningSummaryToggle').checked = notificationSettings.morningSummaryEnabled !== false;
+  document.getElementById('morningSummaryTime').value = notificationSettings.morningSummaryTime || '09:00';
+  document.getElementById('whatsappToggle').checked = notificationSettings.whatsappEnabled;
+  document.getElementById('whatsappNumber').value = notificationSettings.whatsappNumber;
+  document.getElementById('emailToggle').checked = notificationSettings.emailEnabled;
+  document.getElementById('pushToggle').checked = notificationSettings.pushEnabled;
+  
+  // Show/hide WhatsApp setup
+  const whatsappSetup = document.getElementById('whatsappSetup');
+  if (notificationSettings.whatsappEnabled) {
+    whatsappSetup.classList.add('active');
+  } else {
+    whatsappSetup.classList.remove('active');
+  }
+  
+  // Load email settings
+  loadEmailSettings();
+  
+  // Initialize push notifications
+  initializePushNotifications();
+  
+  // Update permission status
+  updatePermissionStatus();
+}
+
+// Save notification settings
+function saveNotificationSettings() {
+  notificationSettings.dueReminders = document.getElementById('dueReminderToggle').checked;
+  notificationSettings.overdueAlerts = document.getElementById('overdueToggle').checked;
+  notificationSettings.reminderDayBefore = document.getElementById('reminderDayBeforeToggle').checked;
+  notificationSettings.morningSummaryEnabled = document.getElementById('morningSummaryToggle').checked;
+  notificationSettings.morningSummaryTime = document.getElementById('morningSummaryTime').value;
+  localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+}
+
+// Update permission status display
+function updatePermissionStatus() {
+  const statusEl = document.getElementById('permissionValue');
+  const httpsNotice = document.getElementById('httpsNotice');
+  
+  // Check if running on file:// or non-HTTPS
+  const isSecureContext = window.isSecureContext || (location.protocol === 'https:');
+  const isFileProtocol = location.protocol === 'file:';
+  
+  if (!('Notification' in window)) {
+    statusEl.textContent = 'Not Supported';
+    statusEl.className = 'status-value denied';
+  } else if (Notification.permission === 'granted') {
+    statusEl.textContent = 'Enabled';
+    statusEl.className = 'status-value granted';
+    httpsNotice.style.display = 'none';
+  } else if (Notification.permission === 'denied') {
+    statusEl.textContent = 'Blocked';
+    statusEl.className = 'status-value denied';
+    if (!isSecureContext) {
+      httpsNotice.style.display = 'block';
+    }
+  } else {
+    statusEl.textContent = 'Ask Permission';
+    statusEl.className = 'status-value default';
+    if (!isSecureContext) {
+      httpsNotice.style.display = 'block';
+    }
+  }
+}
+
+// Toggle web notifications
+async function toggleWebNotifications() {
+  const enabled = document.getElementById('webNotificationToggle').checked;
+  
+  if (enabled) {
+    if (!('Notification' in window)) {
+      showToast('Your browser does not support notifications', 'error');
+      document.getElementById('webNotificationToggle').checked = false;
+      return;
+    }
+    
+    if (Notification.permission === 'default') {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        notificationSettings.webEnabled = true;
+        showToast('Notifications enabled!', 'success');
+      } else {
+        document.getElementById('webNotificationToggle').checked = false;
+        showToast('Notification permission denied', 'error');
+      }
+    } else if (Notification.permission === 'granted') {
+      notificationSettings.webEnabled = true;
+      showToast('Notifications enabled!', 'success');
+    } else {
+      document.getElementById('webNotificationToggle').checked = false;
+      showToast('Notifications are blocked. Please allow in browser settings.', 'error');
+    }
+  } else {
+    notificationSettings.webEnabled = false;
+  }
+  
+  notificationSettings.webEnabled = document.getElementById('webNotificationToggle').checked;
+  localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+  updatePermissionStatus();
+}
+
+// Send test notification
+function sendTestNotification() {
+  if (!notificationSettings.webEnabled) {
+    showToast('Enable web notifications first', 'info');
+    return;
+  }
+  
+  if (Notification.permission !== 'granted') {
+    showToast('Notification permission not granted', 'error');
+    return;
+  }
+  
+  const notification = new Notification('TaskFlow Test', {
+    body: '🔔 Your notifications are working correctly!',
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">✨</text></svg>',
+    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>',
+    tag: 'test-notification',
+    requireInteraction: false
+  });
+  
+  notification.onclick = () => {
+    window.focus();
+    notification.close();
+  };
+  
+  showToast('Test notification sent!', 'success');
+}
+
+// Toggle WhatsApp
+function toggleWhatsApp() {
+  const enabled = document.getElementById('whatsappToggle').checked;
+  const whatsappSetup = document.getElementById('whatsappSetup');
+  
+  if (enabled) {
+    whatsappSetup.classList.add('active');
+    showToast('WhatsApp reminders enabled. Set up your number below.', 'info');
+  } else {
+    whatsappSetup.classList.remove('active');
+  }
+  
+  notificationSettings.whatsappEnabled = enabled;
+  localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+}
+
+// Save WhatsApp number
+function saveWhatsAppNumber() {
+  const number = document.getElementById('whatsappNumber').value.trim();
+  notificationSettings.whatsappNumber = number;
+  localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+  
+  if (number) {
+    showToast('WhatsApp number saved!', 'success');
+  }
+}
+
+// Use predefined contact
+function useWhatsAppContact() {
+  const contact = document.getElementById('whatsappContact').value;
+  if (contact) {
+    document.getElementById('whatsappNumber').value = contact === 'self' ? '' : contact;
+    notificationSettings.whatsappNumber = contact === 'self' ? '' : contact;
+    localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+  }
+}
+
+// Send WhatsApp test
+function sendWhatsAppTest() {
+  const number = document.getElementById('whatsappNumber').value.trim();
+  
+  const message = encodeURIComponent('🔔 *TaskFlow Reminder*\n\nThis is a test message from TaskFlow Todo App!\n\nYou will receive your task reminders here. ✨');
+  
+  let whatsappUrl;
+  if (number) {
+    whatsappUrl = `https://wa.me/${number}?text=${message}`;
+  } else {
+    // Open WhatsApp without number (user selects contact)
+    whatsappUrl = `https://web.whatsapp.com`;
+  }
+  
+  window.open(whatsappUrl, '_blank');
+  showToast('Opening WhatsApp...', 'info');
+}
+
+// Send task reminder via WhatsApp
+function sendWhatsAppReminder(task) {
+  const number = notificationSettings.whatsappNumber;
+  if (!notificationSettings.whatsappEnabled || !number) {
+    showToast('Please set up WhatsApp number first', 'info');
+    return;
+  }
+  
+  let message = `🔔 *Task Reminder*\n\n`;
+  message += `📝 *${task.text}*\n`;
+  if (task.priority) message += `⚡ Priority: ${task.priority}\n`;
+  if (task.category) message += `📁 Category: ${task.category}\n`;
+  if (task.date) message += `📅 Due: ${formatDateForWhatsApp(task.date)}\n`;
+  message += `\n_This reminder was sent by TaskFlow_ ✨`;
+  
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${number}?text=${encodedMessage}`;
+  
+  window.open(whatsappUrl, '_blank');
+}
+
+// Send day-before reminder via WhatsApp (automatic)
+function sendDayBeforeWhatsAppReminder(task) {
+  const number = notificationSettings.whatsappNumber;
+  if (!notificationSettings.whatsappEnabled || !number) return;
+  
+  let message = `⏰ *REMINDER: Task Due Tomorrow!*\n\n`;
+  message += `📝 *${task.text}*\n`;
+  if (task.priority) message += `⚡ Priority: ${task.priority}\n`;
+  if (task.category) message += `📁 Category: ${task.category}\n`;
+  message += `📅 Due: Tomorrow!\n\n`;
+  message += `Don't forget to complete this task! 🎯\n`;
+  message += `_Auto-reminder from TaskFlow_ ✨`;
+  
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${number}?text=${encodedMessage}`;
+  
+  // Open WhatsApp with the reminder
+  window.open(whatsappUrl, '_blank');
+  
+  // Show toast notification
+  showToast(`📱 Sent reminder for: "${task.text}"`, 'info');
+}
+
+// ============ MORNING SUMMARY FUNCTION ============
+
+// Send morning summary via WhatsApp
+function sendMorningSummary() {
+  const number = notificationSettings.whatsappNumber;
+  if (!notificationSettings.whatsappEnabled || !number) return;
+  
+  // Get pending tasks
+  const pendingTasks = tasks.filter(t => !t.completed);
+  const todayTasks = pendingTasks.filter(t => {
+    if (!t.date) return false;
+    const taskDate = new Date(t.date);
+    const today = new Date();
+    return taskDate.toDateString() === today.toDateString();
+  });
+  const overdueTasks = pendingTasks.filter(t => {
+    if (!t.date) return false;
+    const taskDate = new Date(t.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return taskDate < today;
+  });
+  const upcomingTasks = pendingTasks.filter(t => {
+    if (!t.date) return false;
+    const taskDate = new Date(t.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return taskDate >= tomorrow;
+  });
+  
+  if (pendingTasks.length === 0) {
+    return; // No tasks to summarize
+  }
+  
+  // Build the message
+  const now = new Date();
+  let message = `🌅 *Good ${getTimeOfDay()}! Your TaskFlow Summary*\n`;
+  message += `📅 ${now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}\n\n`;
+  
+  if (overdueTasks.length > 0) {
+    message += `⚠️ *OVERDUE (${overdueTasks.length})*\n`;
+    overdueTasks.slice(0, 5).forEach((task, i) => {
+      message += `${i + 1}. ${task.text}\n`;
+    });
+    if (overdueTasks.length > 5) message += `...and ${overdueTasks.length - 5} more\n`;
+    message += `\n`;
+  }
+  
+  if (todayTasks.length > 0) {
+    message += `📋 *DUE TODAY (${todayTasks.length})*\n`;
+    todayTasks.forEach((task, i) => {
+      const priority = task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢';
+      message += `${i + 1}. ${priority} ${task.text}\n`;
+    });
+    message += `\n`;
+  }
+  
+  if (upcomingTasks.length > 0) {
+    message += `📅 *UPCOMING (${upcomingTasks.length})*\n`;
+    upcomingTasks.slice(0, 3).forEach((task, i) => {
+      const date = new Date(task.date);
+      message += `${i + 1}. ${task.text} - ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}\n`;
+    });
+    if (upcomingTasks.length > 3) message += `...and ${upcomingTasks.length - 3} more\n`;
+    message += `\n`;
+  }
+  
+  message += `📊 *Progress:* ${pendingTasks.length - overdueTasks.length} pending, ${tasks.filter(t => t.completed).length} completed\n\n`;
+  message += `_Stay productive! 💪_`;
+  
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${number}?text=${encodedMessage}`;
+  
+  window.open(whatsappUrl, '_blank');
+  showToast('🌅 Morning summary sent to WhatsApp!', 'success');
+}
+
+// Get time of day greeting
+function getTimeOfDay() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Morning';
+  if (hour < 17) return 'Afternoon';
+  return 'Evening';
+}
+
+// Check if it's time for morning summary
+function checkMorningSummary() {
+  if (!notificationSettings.morningSummaryEnabled || !notificationSettings.whatsappEnabled) return;
+  
+  const number = notificationSettings.whatsappNumber;
+  if (!number) return;
+  
+  const now = new Date();
+  const summaryTime = notificationSettings.morningSummaryTime || '09:00';
+  const [hours, minutes] = summaryTime.split(':').map(Number);
+  
+  // Check if current time matches the summary time (within 1 minute window)
+  if (now.getHours() === hours && now.getMinutes() === minutes) {
+    const today = now.toDateString();
+    const lastSent = localStorage.getItem('morningSummaryLastSent');
+    
+    if (lastSent !== today) {
+      sendMorningSummary();
+      localStorage.setItem('morningSummaryLastSent', today);
+    }
+  }
+}
+
+// Test morning summary
+function testMorningSummary() {
+  if (!notificationSettings.whatsappEnabled || !notificationSettings.whatsappNumber) {
+    showToast('Please enable WhatsApp and set your number first', 'error');
+    return;
+  }
+  sendMorningSummary();
+}
+
+// ============ CALENDAR VIEW FUNCTIONS ============
+
+let currentCalendarMonth = new Date();
+let selectedCalendarDate = null;
+
+// Open calendar view
+function openCalendarView() {
+  currentCalendarMonth = new Date();
+  selectedCalendarDate = null;
+  renderCalendar();
+  document.getElementById('calendarModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// Close calendar view
+function closeCalendarView() {
+  document.getElementById('calendarModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Change month
+function changeMonth(delta) {
+  currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + delta);
+  renderCalendar();
+}
+
+// Render calendar
+function renderCalendar() {
+  const year = currentCalendarMonth.getFullYear();
+  const month = currentCalendarMonth.getMonth();
+  
+  // Update header
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                     'July', 'August', 'September', 'October', 'November', 'December'];
+  document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
+  
+  // Get first day of month and total days
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+  
+  // Build calendar grid
+  let html = '';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  // Previous month days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = daysInPrevMonth - i;
+    html += `<div class="calendar-day other-month">${day}</div>`;
+  }
+  
+  // Current month days
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    date.setHours(0, 0, 0, 0);
+    
+    const dateStr = date.toISOString().split('T')[0];
+    const tasksOnDay = getTasksForDate(dateStr);
+    const hasTasks = tasksOnDay.length > 0;
+    const isToday = date.getTime() === today.getTime();
+    const isOverdue = hasTasks && tasksOnDay.some(t => !t.completed && isDateOverdue(t.date));
+    const isSelected = selectedCalendarDate === dateStr;
+    
+    let classes = 'calendar-day';
+    if (isToday) classes += ' today';
+    if (hasTasks) classes += ' has-tasks';
+    if (isOverdue) classes += ' overdue';
+    if (isSelected) classes += ' selected';
+    
+    html += `<div class="${classes}" onclick="selectDate('${dateStr}')">${day}</div>`;
+  }
+  
+  // Next month days
+  const totalCells = firstDay + daysInMonth;
+  const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (let day = 1; day <= remainingCells; day++) {
+    html += `<div class="calendar-day other-month">${day}</div>`;
+  }
+  
+  document.getElementById('calendarDays').innerHTML = html;
+  
+  // Update tasks panel
+  if (selectedCalendarDate) {
+    showTasksForDate(selectedCalendarDate);
+  } else {
+    document.getElementById('selectedDateTitle').textContent = 'Select a date';
+    document.getElementById('selectedDateTasks').innerHTML = '<p class="no-tasks-hint">Click on a date to see tasks</p>';
+  }
+}
+
+// Get tasks for a specific date
+function getTasksForDate(dateStr) {
+  return tasks.filter(task => task.date === dateStr);
+}
+
+// Check if date is overdue
+function isDateOverdue(dateStr) {
+  if (!dateStr) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const taskDate = new Date(dateStr);
+  return taskDate < today;
+}
+
+// Select a date
+function selectDate(dateStr) {
+  selectedCalendarDate = dateStr;
+  renderCalendar();
+  showTasksForDate(dateStr);
+}
+
+// Show tasks for selected date
+function showTasksForDate(dateStr) {
+  const tasksOnDay = getTasksForDate(dateStr);
+  const date = new Date(dateStr);
+  const isToday = date.toDateString() === new Date().toDateString();
+  
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
+  let title = `${dayNames[date.getDay()]}, ${monthNames[date.getMonth()]} ${date.getDate()}`;
+  if (isToday) title += ' (Today)';
+  
+  document.getElementById('selectedDateTitle').textContent = title;
+  
+  if (tasksOnDay.length === 0) {
+    document.getElementById('selectedDateTasks').innerHTML = '<p class="no-tasks-hint">No tasks for this date</p>';
+    return;
+  }
+  
+  let html = '';
+  tasksOnDay.forEach(task => {
+    const priorityClass = task.priority || 'medium';
+    const priorityLabel = (task.priority || 'medium').charAt(0).toUpperCase() + (task.priority || 'medium').slice(1);
+    
+    html += `
+      <div class="task-mini ${task.completed ? 'completed' : ''}" onclick="toggleTaskFromCalendar('${task.id}')">
+        <div class="task-mini-checkbox">${task.completed ? '✓' : ''}</div>
+        <span class="task-mini-text">${escapeHtml(task.text)}</span>
+        <span class="task-mini-priority ${priorityClass}">${priorityLabel}</span>
+      </div>
+    `;
+  });
+  
+  document.getElementById('selectedDateTasks').innerHTML = html;
+}
+
+// Toggle task from calendar
+function toggleTaskFromCalendar(taskId) {
+  toggleTask(taskId);
+  renderCalendar();
+  if (selectedCalendarDate) {
+    showTasksForDate(selectedCalendarDate);
+  }
+  updateStats();
+}
+
+// Format date for WhatsApp message
+function formatDateForWhatsApp(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Open notification settings modal
+function openNotificationSettings() {
+  loadNotificationSettings();
+  document.getElementById('notificationModal').classList.add('active');
+  document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
+
+// Close notification modal
+function closeNotificationModal() {
+  document.getElementById('notificationModal').classList.remove('active');
+  document.body.style.overflow = ''; // Restore scroll
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeNotificationModal();
+    closeEditModal();
+    closeCalendarView();
+  }
+});
+
+// Close modal on outside click
+document.getElementById('notificationModal').addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    closeNotificationModal();
+  }
+});
+
+document.getElementById('editModal').addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    closeEditModal();
+  }
+});
+
+document.getElementById('calendarModal').addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    closeCalendarView();
+  }
+});
+
+// Show toast notification
+function showToast(message, type = 'info') {
+  // Remove existing toast
+  const existingToast = document.querySelector('.toast');
+  if (existingToast) existingToast.remove();
+  
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+    <span>${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span>
+    <span>${message}</span>
+  `;
+  document.body.appendChild(toast);
+  
+  // Trigger animation
+  setTimeout(() => toast.classList.add('show'), 10);
+  
+  // Auto remove
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Start notification checker
+function startNotificationChecker() {
+  // Check every minute for due/overdue tasks and morning summary
+  notificationCheckInterval = setInterval(() => {
+    checkDueTasks();
+    checkMorningSummary();
+  }, 60000);
+  // Also check immediately
+  checkDueTasks();
+  checkMorningSummary();
+}
+
+// Check for due tasks and send notifications
+function checkDueTasks() {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  tasks.forEach(task => {
+    if (task.completed || !task.date) return;
+    
+    const taskDate = new Date(task.date);
+    const taskDateOnly = new Date(taskDate.getFullYear(), taskDate.getMonth(), taskDate.getDate());
+    
+    // Check if task is due tomorrow - send WhatsApp reminder
+    if (taskDateOnly.getTime() === tomorrow.getTime() && notificationSettings.reminderDayBefore && notificationSettings.whatsappEnabled) {
+      const notifiedKey = `notified_daybefore_${task.id}_${tomorrow.getTime()}`;
+      if (!localStorage.getItem(notifiedKey)) {
+        sendDayBeforeWhatsAppReminder(task);
+        localStorage.setItem(notifiedKey, 'true');
+      }
+    }
+    
+    // Check if task is due today
+    if (taskDateOnly.getTime() === today.getTime() && notificationSettings.dueReminders && notificationSettings.webEnabled) {
+      const notifiedKey = `notified_today_${task.id}_${today.getTime()}`;
+      if (!localStorage.getItem(notifiedKey)) {
+        sendDueNotification(task);
+        localStorage.setItem(notifiedKey, 'true');
+      }
+    }
+    
+    // Check if task is overdue
+    if (taskDateOnly < today && notificationSettings.overdueAlerts && notificationSettings.webEnabled) {
+      const notifiedKey = `notified_overdue_${task.id}`;
+      if (!localStorage.getItem(notifiedKey)) {
+        sendOverdueNotification(task);
+        localStorage.setItem(notifiedKey, 'true');
+      }
+    }
+  });
+}
+
+// Send due notification
+function sendDueNotification(task) {
+  if (Notification.permission !== 'granted') return;
+  
+  const notification = new Notification('⏰ Task Due Today', {
+    body: task.text,
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📋</text></svg>',
+    tag: `due-${task.id}`,
+    requireInteraction: false
+  });
+  
+  notification.onclick = () => {
+    window.focus();
+    notification.close();
+  };
+  
+  // Also offer WhatsApp reminder
+  if (notificationSettings.whatsappEnabled) {
+    setTimeout(() => {
+      if (confirm('Would you like to send this reminder to WhatsApp?')) {
+        sendWhatsAppReminder(task);
+      }
+    }, 1000);
+  }
+}
+
+// Send overdue notification
+function sendOverdueNotification(task) {
+  if (Notification.permission !== 'granted') return;
+  
+  const notification = new Notification('⚠️ Task Overdue!', {
+    body: `${task.text} - was due ${formatDate(task.date)}`,
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⚠️</text></svg>',
+    tag: `overdue-${task.id}`,
+    requireInteraction: true
+  });
+  
+  notification.onclick = () => {
+    window.focus();
+    notification.close();
+  };
+}
+
+// Add WhatsApp button to task actions
+function addWhatsAppButton(taskId, task) {
+  if (!notificationSettings.whatsappEnabled) return '';
+  return `<button class="action-btn task-whatsapp-btn" onclick="sendWhatsAppReminder(getTaskById('${taskId}'))" title="Send via WhatsApp">💬</button>`;
+}
+
+// Get task by ID helper
+function getTaskById(id) {
+  return tasks.find(t => t.id === id);
+}
+
+// Open settings (placeholder for future settings)
+function openSettings() {
+  showToast('Settings coming soon!', 'info');
+}
+
+// ============ NOTIFICATION BANNER FUNCTIONS ============
+
+// Check if banner should be shown
+function shouldShowBanner() {
+  // Don't show if notifications are already enabled
+  if (notificationSettings.webEnabled) return false;
+  // Don't show if user dismissed it
+  if (localStorage.getItem('notificationBannerDismissed')) return false;
+  // Don't show if permission is denied (user blocked it)
+  if (Notification.permission === 'denied') return false;
+  // Check if browser supports notifications
+  if (!('Notification' in window)) return false;
+  return true;
+}
+
+// Show notification banner on load
+function initializeBanner() {
+  const banner = document.getElementById('notificationBanner');
+  if (shouldShowBanner()) {
+    banner.classList.remove('hidden');
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+// Enable notifications from banner
+async function enableNotificationsFromBanner() {
+  if (!('Notification' in window)) {
+    showToast('Your browser does not support notifications', 'error');
+    return;
+  }
+  
+  if (Notification.permission === 'denied') {
+    showToast('Notifications blocked. Please enable them in browser settings.', 'error');
+    return;
+  }
+  
+  if (Notification.permission === 'default') {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      notificationSettings.webEnabled = true;
+      localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+      showToast('Notifications enabled successfully!', 'success');
+      document.getElementById('notificationBanner').classList.add('hidden');
+      updatePermissionStatus();
+    } else {
+      showToast('Permission denied. You can enable later from settings.', 'info');
+    }
+  } else if (Notification.permission === 'granted') {
+    notificationSettings.webEnabled = true;
+    localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+    showToast('Notifications enabled!', 'success');
+    document.getElementById('notificationBanner').classList.add('hidden');
+    updatePermissionStatus();
+  }
+}
+
+// Dismiss banner
+function dismissBanner() {
+  localStorage.setItem('notificationBannerDismissed', 'true');
+  document.getElementById('notificationBanner').classList.add('hidden');
+  showToast('You can enable notifications later from the bell icon.', 'info');
+}
+
+// ============ EMAIL NOTIFICATION FUNCTIONS ============
+
+// Toggle email notifications
+function toggleEmailNotifications() {
+  const enabled = document.getElementById('emailToggle').checked;
+  const emailSetup = document.getElementById('emailSetup');
+  
+  if (enabled) {
+    emailSetup.style.display = 'block';
+    showToast('Email notifications enabled. Set up your email below.', 'info');
+  } else {
+    emailSetup.style.display = 'none';
+  }
+  
+  notificationSettings.emailEnabled = enabled;
+  localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+}
+
+// Save email settings
+function saveEmailSettings() {
+  notificationSettings.emailAddress = document.getElementById('emailAddress').value.trim();
+  notificationSettings.emailProvider = document.getElementById('emailProvider').value;
+  notificationSettings.emailjsKey = document.getElementById('emailjsKey').value.trim();
+  notificationSettings.emailjsService = document.getElementById('emailjsService').value.trim();
+  notificationSettings.emailjsTemplate = document.getElementById('emailjsTemplate').value.trim();
+  
+  localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+  
+  // Show/hide EmailJS setup based on provider
+  const emailjsSetup = document.getElementById('emailjsSetup');
+  if (notificationSettings.emailProvider === 'gmail') {
+    emailjsSetup.style.display = 'block';
+  } else {
+    emailjsSetup.style.display = 'none';
+  }
+}
+
+// Load email settings into UI
+function loadEmailSettings() {
+  document.getElementById('emailAddress').value = notificationSettings.emailAddress || '';
+  document.getElementById('emailProvider').value = notificationSettings.emailProvider || 'mailto';
+  document.getElementById('emailjsKey').value = notificationSettings.emailjsKey || '';
+  document.getElementById('emailjsService').value = notificationSettings.emailjsService || '';
+  document.getElementById('emailjsTemplate').value = notificationSettings.emailjsTemplate || '';
+  
+  const emailSetup = document.getElementById('emailSetup');
+  const emailjsSetup = document.getElementById('emailjsSetup');
+  
+  if (notificationSettings.emailEnabled) {
+    emailSetup.style.display = 'block';
+    if (notificationSettings.emailProvider === 'gmail') {
+      emailjsSetup.style.display = 'block';
+    }
+  } else {
+    emailSetup.style.display = 'none';
+  }
+}
+
+// Send test email
+function sendEmailTest() {
+  const email = notificationSettings.emailAddress;
+  
+  if (!email) {
+    showToast('Please enter your email address first', 'error');
+    return;
+  }
+  
+  if (notificationSettings.emailProvider === 'mailto') {
+    // Simple mailto link
+    const subject = encodeURIComponent('TaskFlow Test Email');
+    const body = encodeURIComponent('This is a test email from TaskFlow Todo App!\n\nYour email notifications are set up correctly. ✨');
+    window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
+    showToast('Opening email app...', 'info');
+  } else if (notificationSettings.emailProvider === 'gmail') {
+    // EmailJS
+    if (!notificationSettings.emailjsKey || !notificationSettings.emailjsService || !notificationSettings.emailjsTemplate) {
+      showToast('Please fill in all EmailJS fields', 'error');
+      return;
+    }
+    
+    sendEmailViaEmailJS('TaskFlow Test Email', 'This is a test email from TaskFlow Todo App!\n\nYour email notifications are set up correctly. ✨')
+      .then(() => showToast('Test email sent!', 'success'))
+      .catch((err) => {
+        console.error('EmailJS error:', err);
+        showToast('Failed to send email. Check EmailJS settings.', 'error');
+      });
+  }
+}
+
+// Send email via EmailJS
+async function sendEmailViaEmailJS(subject, body) {
+  return new Promise((resolve, reject) => {
+    // Load EmailJS SDK if not loaded
+    if (!window.emailjs) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      script.onload = () => {
+        window.emailjs.init(notificationSettings.emailjsKey);
+        sendEmail();
+      };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    } else {
+      sendEmail();
+    }
+    
+    function sendEmail() {
+      const templateParams = {
+        to_email: notificationSettings.emailAddress,
+        from_name: 'TaskFlow',
+        subject: subject,
+        message: body,
+        reply_to: notificationSettings.emailAddress
+      };
+      
+      window.emailjs.send(
+        notificationSettings.emailjsService,
+        notificationSettings.emailjsTemplate,
+        templateParams
+      ).then(resolve).catch(reject);
+    }
+  });
+}
+
+// Send task reminder via email
+async function sendTaskEmailReminder(task) {
+  if (!notificationSettings.emailEnabled || !notificationSettings.emailAddress) return;
+  
+  const subject = `Task Reminder: ${task.text}`;
+  let body = `Task Reminder from TaskFlow!\n\n`;
+  body += `Task: ${task.text}\n`;
+  if (task.priority) body += `Priority: ${task.priority}\n`;
+  if (task.category) body += `Category: ${task.category}\n`;
+  if (task.date) body += `Due: ${formatDateForWhatsApp(task.date)}\n`;
+  body += `\n_This reminder was sent by TaskFlow_ ✨`;
+  
+  if (notificationSettings.emailProvider === 'mailto') {
+    const encodedSubject = encodeURIComponent(subject);
+    const encodedBody = encodeURIComponent(body);
+    window.open(`mailto:${notificationSettings.emailAddress}?subject=${encodedSubject}&body=${encodedBody}`, '_blank');
+  } else {
+    try {
+      await sendEmailViaEmailJS(subject, body);
+      showToast(`Email reminder sent for: "${task.text}"`, 'info');
+    } catch (err) {
+      console.error('Failed to send email:', err);
+    }
+  }
+}
+
+// ============ PUSH NOTIFICATION FUNCTIONS ============
+
+// Check if HTTPS
+function isHTTPS() {
+  return location.protocol === 'https:' || window.isSecureContext === true;
+}
+
+// Toggle push notifications
+async function togglePushNotifications() {
+  const enabled = document.getElementById('pushToggle').checked;
+  const pushHttpsNotice = document.getElementById('pushHttpsNotice');
+  
+  if (!isHTTPS()) {
+    pushHttpsNotice.style.display = 'block';
+    document.getElementById('pushToggle').checked = false;
+    showToast('Push notifications require HTTPS', 'error');
+    return;
+  }
+  
+  pushHttpsNotice.style.display = 'none';
+  
+  if (enabled) {
+    try {
+      const registration = await registerServiceWorker();
+      if (registration) {
+        serviceWorkerRegistration = registration;
+        notificationSettings.pushEnabled = true;
+        localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+        updatePushStatus();
+        showToast('Push notifications enabled!', 'success');
+      }
+    } catch (err) {
+      console.error('Push registration failed:', err);
+      document.getElementById('pushToggle').checked = false;
+      showToast('Failed to enable push notifications', 'error');
+    }
+  } else {
+    notificationSettings.pushEnabled = false;
+    localStorage.setItem('taskflow_notifications', JSON.stringify(notificationSettings));
+    updatePushStatus();
+  }
+}
+
+// Register Service Worker
+async function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) {
+    showToast('Service workers not supported in this browser', 'error');
+    return null;
+  }
+  
+  try {
+    // Create a simple service worker inline
+    const swCode = `
+      // TaskFlow Service Worker
+      const CACHE_NAME = 'taskflow-v1';
+      
+      self.addEventListener('install', (event) => {
+        self.skipWaiting();
+      });
+      
+      self.addEventListener('activate', (event) => {
+        event.waitUntil(clients.claim());
+      });
+      
+      self.addEventListener('push', (event) => {
+        const data = event.data ? event.data.json() : {};
+        const title = data.title || 'TaskFlow';
+        const options = {
+          body: data.body || 'You have a task reminder!',
+          icon: data.icon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">✨</text></svg>',
+          badge: data.badge || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>',
+          tag: data.tag || 'taskflow-notification',
+          requireInteraction: data.requireInteraction || false,
+          data: data.data || {}
+        };
+        
+        event.waitUntil(
+          self.registration.showNotification(title, options)
+        );
+      });
+      
+      self.addEventListener('notificationclick', (event) => {
+        event.notification.close();
+        event.waitUntil(
+          clients.openWindow('${location.origin}${location.pathname}')
+        );
+      });
+    `;
+    
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    
+    const registration = await navigator.serviceWorker.register(swUrl, { scope: './' });
+    await navigator.serviceWorker.ready;
+    return registration;
+  } catch (err) {
+    console.error('Service Worker registration failed:', err);
+    return null;
+  }
+}
+
+// Update push status display
+function updatePushStatus() {
+  const statusEl = document.getElementById('pushStatusValue');
+  
+  if (!isHTTPS()) {
+    statusEl.textContent = 'Needs HTTPS';
+    statusEl.className = 'status-value error';
+    return;
+  }
+  
+  if (!('serviceWorker' in navigator)) {
+    statusEl.textContent = 'Not Supported';
+    statusEl.className = 'status-value error';
+    return;
+  }
+  
+  if (notificationSettings.pushEnabled && serviceWorkerRegistration) {
+    statusEl.textContent = 'Active';
+    statusEl.className = 'status-value active';
+  } else {
+    statusEl.textContent = 'Inactive';
+    statusEl.className = 'status-value inactive';
+  }
+}
+
+// Send test push notification
+async function sendPushTest() {
+  if (!isHTTPS()) {
+    showToast('Push notifications require HTTPS', 'error');
+    return;
+  }
+  
+  if (!notificationSettings.pushEnabled || !serviceWorkerRegistration) {
+    showToast('Please enable push notifications first', 'info');
+    return;
+  }
+  
+  try {
+    await serviceWorkerRegistration.showNotification('TaskFlow Test', {
+      body: '🔔 Your push notifications are working correctly!',
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">✨</text></svg>',
+      tag: 'test-push',
+      requireInteraction: false
+    });
+    showToast('Test push sent!', 'success');
+  } catch (err) {
+    console.error('Push notification failed:', err);
+    showToast('Failed to send push notification', 'error');
+  }
+}
+
+// Send push notification for task
+async function sendTaskPushNotification(task, type = 'reminder') {
+  if (!notificationSettings.pushEnabled || !serviceWorkerRegistration) return;
+  
+  const titles = {
+    'daybefore': '⏰ Task Due Tomorrow!',
+    'due': '⏰ Task Due Today!',
+    'overdue': '⚠️ Task Overdue!'
+  };
+  
+  const messages = {
+    'daybefore': `Don't forget: ${task.text}`,
+    'due': `${task.text} is due today!`,
+    'overdue': `${task.text} is overdue!`
+  };
+  
+  try {
+    await serviceWorkerRegistration.showNotification(titles[type], {
+      body: messages[type],
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📋</text></svg>',
+      tag: `task-${type}-${task.id}`,
+      requireInteraction: type === 'overdue'
+    });
+  } catch (err) {
+    console.error('Push notification failed:', err);
+  }
+}
+
+// Initialize push notifications on load
+async function initializePushNotifications() {
+  updatePushStatus();
+  
+  if (isHTTPS() && 'serviceWorker' in navigator && notificationSettings.pushEnabled) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      if (registrations.length > 0) {
+        serviceWorkerRegistration = registrations[0];
+        updatePushStatus();
+      }
+    } catch (err) {
+      console.error('Failed to get service worker registrations:', err);
+    }
+  }
+}
 
 // Generate unique ID
 function generateId() {
@@ -952,6 +3170,7 @@ function renderTasks() {
         </div>
       </div>
       <div class="task-actions">
+        ${notificationSettings.whatsappEnabled ? `<button class="action-btn task-whatsapp-btn" onclick="sendWhatsAppReminder(getTaskById('${task.id}'))" title="Send via WhatsApp">💬</button>` : ''}
         <button class="action-btn edit" onclick="openEditModal('${task.id}')" title="Edit">✏️</button>
         <button class="action-btn delete" onclick="deleteTask('${task.id}')" title="Delete">🗑️</button>
       </div>
@@ -965,20 +3184,6 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
-
-// Close modal on outside click
-document.getElementById('editModal').addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal-overlay')) {
-    closeEditModal();
-  }
-});
-
-// Close modal on Escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeEditModal();
-  }
-});
 </script>
 
 </body>
