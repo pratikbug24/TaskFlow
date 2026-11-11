@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
+import { Logo } from './ui.js';
 
 const NAV = [
   { href: '#features', label: 'Features' },
@@ -47,7 +48,7 @@ export function MarketingHeader() {
     <header className="mkt-header">
       <div className="mkt-container mkt-header-inner">
         <a className="brand" href="#top" onClick={() => setOpen(false)}>
-          <span className="brand-mark">TF</span>
+          <Logo />
           <div>
             <strong>TaskFlow</strong>
             <span className="brand-sub">Personal todos</span>
@@ -92,7 +93,7 @@ export function MarketingFooter() {
         <div className="mkt-footer-grid">
           <div className="mkt-footer-brand">
             <div className="brand">
-              <span className="brand-mark">TF</span>
+              <Logo />
               <div>
                 <strong>TaskFlow</strong>
                 <span className="brand-sub">Personal todos</span>

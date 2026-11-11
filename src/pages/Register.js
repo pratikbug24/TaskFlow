@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
 import { useToast } from '../context/ToastContext.js';
+import { Logo } from '../components/ui.js';
 
 export default function Register() {
   const { register } = useAuth();
@@ -32,7 +33,7 @@ export default function Register() {
     <div className="auth">
       <div className="auth-card">
         <div className="brand">
-          <span className="brand-mark">TF</span>
+          <Logo />
           <div>
             <strong>TaskFlow</strong>
             <span className="brand-sub">Personal todos</span>

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Avatar } from './ui.js';
+import { Avatar, Logo } from './ui.js';
 import { useAuth } from '../context/AuthContext.js';
 
 const NAV = [
@@ -19,7 +19,7 @@ export default function Sidebar({ open, onClose }) {
       {open ? <div className="scrim" onClick={onClose} /> : null}
       <aside className={`sidebar${open ? ' open' : ''}`}>
         <div className="brand">
-          <span className="brand-mark">TF</span>
+          <Logo />
           <div>
             <strong>TaskFlow</strong>
             <span className="brand-sub">Personal todos</span>
