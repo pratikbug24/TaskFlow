@@ -2,7 +2,7 @@
 
 const jwt = require('jsonwebtoken');
 const config = require('./config');
-const { fail } = require('./respond').default;
+const { fail } = require('./respond');
 
 /** Wraps an async route so rejected promises reach the error handler. */
 function asyncHandler(handler) {

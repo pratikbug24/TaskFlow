@@ -10,4 +10,4 @@ function fail(res, message, status = 400) {
   res.status(status).json({ ok: false, error: message });
 }
 
-export default { ok, fail };
+module.exports = { ok, fail };
